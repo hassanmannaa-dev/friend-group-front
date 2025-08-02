@@ -3,42 +3,14 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card'
 import { Avatar, AvatarImage, AvatarFallback } from '@/app/components/ui/avatar'
 import { Button } from '@/app/components/ui/button'
 import Marquee from '@/components/ui/marquee'
-
-// Mock data for images
-const mockImages = [
-  {
-    id: 1,
-    title: "Beautiful Sunset",
-    description: "A stunning sunset over the mountains",
-    url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop",
-    date: "2024-01-15"
-  },
-  {
-    id: 2,
-    title: "Ocean Waves",
-    description: "Peaceful ocean waves crashing on the shore",
-    url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop",
-    date: "2024-01-10"
-  },
-  {
-    id: 3,
-    title: "Forest Path",
-    description: "A serene forest path in autumn",
-    url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop",
-    date: "2024-01-05"
-  },
-  {
-    id: 4,
-    title: "City Skyline",
-    description: "Modern city skyline at night",
-    url: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop",
-    date: "2024-01-01"
-  }
-]
+import { usePosts } from '@/hooks/usePosts'
+import { ImagePost } from '@/components/ImagePost'
+import { VideoPost } from '@/components/VideoPost'
+import { BlogPost } from '@/components/BlogPost'
+import { PostsPagination } from '@/components/PostsPagination'
 
 interface User {
   _id: string
@@ -51,6 +23,12 @@ interface User {
 export default function Home() {
   const router = useRouter()
   const [user, setUser] = useState<User | null>(null)
+  const [activeTab, setActiveTab] = useState<'image' | 'video' | 'blog'>('image')
+
+  // Use the custom hook for each post type
+  const imagePosts = usePosts('image')
+  const videoPosts = usePosts('video')
+  const blogPosts = usePosts('blog')
 
   useEffect(() => {
     // Check if user is already logged in
@@ -79,6 +57,30 @@ export default function Home() {
     // Redirect to login page
     router.push('/login')
   }
+
+  const handleTabChange = (value: string) => {
+    const tabMapping: Record<string, 'image' | 'video' | 'blog'> = {
+      'images': 'image',
+      'videos': 'video',
+      'blogs': 'blog'
+    }
+    setActiveTab(tabMapping[value] || 'image')
+  }
+
+  const getCurrentPostsData = () => {
+    switch (activeTab) {
+      case 'image':
+        return imagePosts
+      case 'video':
+        return videoPosts
+      case 'blog':
+        return blogPosts
+      default:
+        return imagePosts
+    }
+  }
+
+  const currentPostsData = getCurrentPostsData()
 
   if (!user) {
     return (
@@ -114,46 +116,113 @@ export default function Home() {
           </Button>
         </div>
 
-        <Tabs defaultValue="images" className="w-full">
+        <Tabs defaultValue="images" className="w-full" onValueChange={handleTabChange}>
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="images">Images</TabsTrigger>
-            <TabsTrigger value="videos">Videos</TabsTrigger>
-            <TabsTrigger value="blogs">Blogs</TabsTrigger>
+            <TabsTrigger value="images" className="cursor-pointer">Images</TabsTrigger>
+            <TabsTrigger value="videos" className="cursor-pointer">Videos</TabsTrigger>
+            <TabsTrigger value="blogs" className="cursor-pointer">Blogs</TabsTrigger>
           </TabsList>
           
           <TabsContent value="images" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {mockImages.map((image) => (
-                <Card key={image.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="aspect-square overflow-hidden">
-                    <img 
-                      src={image.url} 
-                      alt={image.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <CardHeader className="p-4">
-                    <CardTitle className="text-lg">{image.title}</CardTitle>
-                    <CardDescription>{image.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-4 pt-0">
-                    <p className="text-sm text-gray-500">{image.date}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            {currentPostsData.loading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+                  <p className="mt-2 text-gray-600">Loading images...</p>
+                </div>
+              </div>
+            ) : currentPostsData.error ? (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-red-600">{currentPostsData.error}</p>
+              </div>
+            ) : currentPostsData.posts.length === 0 ? (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-gray-500 text-lg">No images found</p>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {currentPostsData.posts.map((post) => (
+                    <ImagePost key={post._id} post={post} />
+                  ))}
+                </div>
+                {currentPostsData.pagination && (
+                  <PostsPagination
+                    pagination={currentPostsData.pagination}
+                    currentPage={currentPostsData.currentPage}
+                    onPageChange={currentPostsData.setCurrentPage}
+                  />
+                )}
+              </>
+            )}
           </TabsContent>
           
           <TabsContent value="videos" className="mt-6">
-            <div className="flex items-center justify-center h-64">
-              <p className="text-gray-500 text-lg">Videos content coming soon...</p>
-            </div>
+            {currentPostsData.loading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+                  <p className="mt-2 text-gray-600">Loading videos...</p>
+                </div>
+              </div>
+            ) : currentPostsData.error ? (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-red-600">{currentPostsData.error}</p>
+              </div>
+            ) : currentPostsData.posts.length === 0 ? (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-gray-500 text-lg">No videos found</p>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {currentPostsData.posts.map((post) => (
+                    <VideoPost key={post._id} post={post} />
+                  ))}
+                </div>
+                {currentPostsData.pagination && (
+                  <PostsPagination
+                    pagination={currentPostsData.pagination}
+                    currentPage={currentPostsData.currentPage}
+                    onPageChange={currentPostsData.setCurrentPage}
+                  />
+                )}
+              </>
+            )}
           </TabsContent>
           
           <TabsContent value="blogs" className="mt-6">
-            <div className="flex items-center justify-center h-64">
-              <p className="text-gray-500 text-lg">Blogs content coming soon...</p>
-            </div>
+            {currentPostsData.loading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+                  <p className="mt-2 text-gray-600">Loading blogs...</p>
+                </div>
+              </div>
+            ) : currentPostsData.error ? (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-red-600">{currentPostsData.error}</p>
+              </div>
+            ) : currentPostsData.posts.length === 0 ? (
+              <div className="flex items-center justify-center h-64">
+                <p className="text-gray-500 text-lg">No blogs found</p>
+              </div>
+            ) : (
+              <>
+                <div className="max-w-2xl mx-auto">
+                  {currentPostsData.posts.map((post) => (
+                    <BlogPost key={post._id} post={post} />
+                  ))}
+                </div>
+                {currentPostsData.pagination && (
+                  <PostsPagination
+                    pagination={currentPostsData.pagination}
+                    currentPage={currentPostsData.currentPage}
+                    onPageChange={currentPostsData.setCurrentPage}
+                  />
+                )}
+              </>
+            )}
           </TabsContent>
         </Tabs>
       </div>

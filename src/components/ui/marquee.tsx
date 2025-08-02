@@ -15,23 +15,23 @@ export default function Marquee({ items }: { items: string[] }) {
 
   return (
     <div 
-      className="relative flex w-full overflow-x-hidden border-b-2 border-t-2 border-border bg-secondary-background text-foreground font-base cursor-pointer hover:opacity-80 transition-opacity"
+      className="relative flex w-full overflow-hidden border-b-2 border-t-2 border-border bg-secondary-background text-foreground font-base cursor-pointer hover:opacity-80 transition-opacity"
       onClick={handleClick}
     >
-      <div className="animate-marquee whitespace-nowrap py-12">
+      <div className="animate-marquee whitespace-nowrap py-1 sm:py-2 md:py-3 lg:py-4 xl:py-6">
         {items.map((item) => {
           return (
-            <span key={item} className="mx-4 text-4xl">
+            <span key={item} className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">
               {item}
             </span>
           )
         })}
       </div>
 
-      <div className="absolute top-0 animate-marquee2 whitespace-nowrap py-12">
+      <div className="absolute top-0 animate-marquee2 whitespace-nowrap py-1 sm:py-2 md:py-3 lg:py-4 xl:py-6">
         {items.map((item) => {
           return (
-            <span key={item} className="mx-4 text-4xl">
+            <span key={item} className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">
               {item}
             </span>
           )
