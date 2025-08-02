@@ -50,47 +50,47 @@ export function BlogPost({ post, onLike }: BlogPostProps) {
 
   return (
     <Card 
-      className="mb-6 hover:shadow-lg transition-shadow cursor-pointer"
+      className="mb-4 sm:mb-6 hover:shadow-lg transition-shadow cursor-pointer mx-2 sm:mx-0"
       onClick={handlePostClick}
     >
-      <CardHeader>
-        <div className="flex items-center space-x-3 mb-4">
-          <Avatar className="w-12 h-12">
+      <CardHeader className="p-4 sm:p-6">
+        <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+          <Avatar className="w-10 h-10 sm:w-12 sm:h-12">
             <AvatarImage src={post.author.avatarUrl} alt={`${post.author.firstName} ${post.author.lastName}`} />
             <AvatarFallback>
               {post.author.firstName.charAt(0)}{post.author.lastName.charAt(0)}
             </AvatarFallback>
           </Avatar>
-          <div>
-            <CardTitle className="text-lg">
+          <div className="flex-1 min-w-0">
+            <CardTitle className="text-base sm:text-lg truncate">
               {post.author.firstName} {post.author.lastName}
             </CardTitle>
-            <CardDescription className="text-sm">
+            <CardDescription className="text-xs sm:text-sm">
               {formatDate(post.createdAt)}
             </CardDescription>
           </div>
         </div>
-        <CardTitle className="text-xl mb-2">{post.caption}</CardTitle>
+        <CardTitle className="text-lg sm:text-xl mb-2 leading-tight">{post.caption}</CardTitle>
       </CardHeader>
       
-      <CardContent>
+      <CardContent className="p-4 sm:p-6 pt-0">
         {post.content && (
-          <div className="mb-4">
-            <p className="text-gray-700 whitespace-pre-wrap">{post.content}</p>
+          <div className="mb-3 sm:mb-4">
+            <p className="text-gray-700 whitespace-pre-wrap text-sm sm:text-base leading-relaxed">{post.content}</p>
           </div>
         )}
         
         <div className="flex items-center justify-between text-gray-500">
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-4 sm:space-x-6">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 handleLike();
               }}
-              className="flex items-center space-x-2 hover:text-red-500 transition-colors"
+              className="flex items-center space-x-1 sm:space-x-2 hover:text-red-500 transition-colors p-1"
             >
-              <Heart className={`w-5 h-5 ${isLiked ? 'fill-red-500 text-red-500' : ''}`} />
-              <span>{likeCount}</span>
+              <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${isLiked ? 'fill-red-500 text-red-500' : ''}`} />
+              <span className="text-sm sm:text-base">{likeCount}</span>
             </button>
             
             <button
@@ -98,10 +98,10 @@ export function BlogPost({ post, onLike }: BlogPostProps) {
                 e.stopPropagation();
                 router.push(`/post/${post._id}`);
               }}
-              className="flex items-center space-x-2 hover:text-blue-500 transition-colors"
+              className="flex items-center space-x-1 sm:space-x-2 hover:text-blue-500 transition-colors p-1"
             >
-              <MessageCircle className="w-5 h-5" />
-              <span>{post.comments.length}</span>
+              <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-sm sm:text-base">{post.comments.length}</span>
             </button>
           </div>
         </div>
