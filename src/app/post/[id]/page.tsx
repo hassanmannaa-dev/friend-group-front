@@ -1,5 +1,6 @@
 "use client"
 
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Avatar, AvatarImage, AvatarFallback } from '@/app/components/ui/avatar';
@@ -7,6 +8,25 @@ import { Button } from '@/app/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Heart, MessageCircle, ArrowLeft, Send } from 'lucide-react';
 import { Post, Comment, apiService } from '@/lib/api';
+
+// Helper function to detect YouTube URLs and extract video ID
+const getYouTubeVideoId = (url: string): string | null => {
+  console.log("URL", url);
+  // Handle the specific format: https://youtu.be/embed/VIDEO_ID
+  if (url.includes('youtu.be/embed/')) {
+    const videoId = url.split('youtu.be/embed/')[1];
+    return videoId && videoId.length === 11 ? videoId : null;
+  }
+  
+  const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+  const match = url.match(youtubeRegex);
+  console.log("MATCH", match);
+  return match ? match[1] : null;
+};
+
+const isYouTubeUrl = (url: string): boolean => {
+  return getYouTubeVideoId(url) !== null;
+};
 
 export default function PostPage() {
   const params = useParams();
@@ -163,11 +183,27 @@ export default function PostPage() {
             
             {post.type === 'video' && post.mediaUrl && (
               <div className="mb-4">
-                <video 
-                  src={post.mediaUrl} 
-                  controls
-                  className="w-full max-h-96 object-cover rounded-lg"
-                />
+                {isYouTubeUrl(post.mediaUrl) ? (
+                  <div className="aspect-video w-full rounded-lg overflow-hidden">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${getYouTubeVideoId(post.mediaUrl)}`}
+                      className="w-full h-full"
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                                 ) : (
+                   <div className="w-full rounded-lg overflow-hidden">
+                     <video 
+                       src={post.mediaUrl} 
+                       controls
+                       className="w-full h-auto max-w-full max-h-96 object-contain"
+                       preload="metadata"
+                     />
+                   </div>
+                 )}
               </div>
             )}
             
