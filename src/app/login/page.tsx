@@ -121,7 +121,7 @@ export default function LoginPage() {
 
   if (isLoadingUsers) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
           <p className="mt-2 text-gray-600">Loading users...</p>
@@ -131,13 +131,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="max-w-6xl w-full space-y-8 p-8">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-6xl space-y-6 sm:space-y-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             {selectedUser ? 'Enter Password' : 'Choose Your Account'}
           </h2>
-          <p className="text-gray-600">
+          <p className="text-sm sm:text-base text-gray-600 px-4">
             {selectedUser 
               ? `Sign in as ${selectedUser.firstName}`
               : 'Select your account to continue'
@@ -146,28 +146,28 @@ export default function LoginPage() {
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mx-4 sm:mx-0">
             {error}
           </div>
         )}
 
         {!selectedUser ? (
           // User selection view
-          <div className="space-y-4">
-            <div className="grid grid-cols-4 gap-12">
+          <div className="space-y-4 px-4 sm:px-0">
+            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-12">
               {users.map((user) => (
                 <button
                   key={user._id}
                   onClick={() => handleUserSelect(user)}
-                  className="group flex flex-col items-center p-8 rounded-xl hover:bg-blue-50 transition-all duration-300 ease-in-out transform hover:scale-110 min-w-0 cursor-pointer"
+                  className="group flex flex-col items-center p-4 sm:p-6 lg:p-8 rounded-xl hover:bg-blue-50 transition-all duration-300 ease-in-out transform hover:scale-105 sm:hover:scale-110 min-w-0 cursor-pointer"
                 >
-                  <Avatar className="w-24 h-24 mb-4 group-hover:scale-110 transition-transform duration-300 ease-in-out">
+                  <Avatar className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300 ease-in-out">
                     <AvatarImage src={user.avatarUrl} alt={user.fullName} />
-                    <AvatarFallback className="text-2xl font-semibold">
+                    <AvatarFallback className="text-lg sm:text-xl lg:text-2xl font-semibold">
                       {user.firstName.charAt(0)}{user.lastName.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-lg font-medium text-gray-900 text-center group-hover:text-blue-600 transition-colors duration-300 truncate w-full">
+                  <span className="text-sm sm:text-base lg:text-lg font-medium text-gray-900 text-center group-hover:text-blue-600 transition-colors duration-300 truncate w-full">
                     {user.firstName} {user.lastName}
                   </span>
                 </button>
@@ -176,20 +176,20 @@ export default function LoginPage() {
           </div>
         ) : (
           // Password input view
-          <div className="space-y-6">
+          <div className="space-y-6 px-4 sm:px-0">
             <div className="flex flex-col items-center">
-              <Avatar className="w-20 h-20 mb-4">
+              <Avatar className="w-16 h-16 sm:w-20 sm:h-20 mb-4">
                 <AvatarImage src={selectedUser.avatarUrl} alt={selectedUser.fullName} />
-                <AvatarFallback className="text-xl font-semibold">
+                <AvatarFallback className="text-lg sm:text-xl font-semibold">
                   {selectedUser.firstName.charAt(0)}{selectedUser.lastName.charAt(0)}
                 </AvatarFallback>
               </Avatar>
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 text-center">
                 {selectedUser.firstName} {selectedUser.lastName}
               </h3>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 max-w-sm mx-auto w-full">
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                   Password
