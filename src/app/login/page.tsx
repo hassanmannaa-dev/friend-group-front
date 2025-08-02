@@ -46,7 +46,7 @@ export default function LoginPage() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/users')
+      const response = await fetch('https://emaur-api-40d46b1fc5a5.herokuapp.com/api/auth/users')
       const data = await response.json()
       console.log(data)
       if (data.success) {
@@ -83,7 +83,7 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch('https://emaur-api-40d46b1fc5a5.herokuapp.com/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
