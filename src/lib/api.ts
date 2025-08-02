@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://emaur-api-40d46b1fc5a5.herokuapp.com/api';
 
 export interface Post {
   _id: string;
