@@ -1,10 +1,9 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { Avatar, AvatarImage, AvatarFallback } from '@/app/components/ui/avatar'
-import { Input } from '@/app/components/ui/input'
-import { Button } from '@/app/components/ui/button'
-import { cn } from '@/lib/utils'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 interface User {
   _id: string

@@ -3,9 +3,9 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Avatar, AvatarImage, AvatarFallback } from '@/app/components/ui/avatar';
-import { Button } from '@/app/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Heart, MessageCircle, ArrowLeft, Send } from 'lucide-react';
 import { Post, Comment, apiService } from '@/lib/api';
 
