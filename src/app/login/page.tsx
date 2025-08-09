@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { API_BASE_URL } from '@/lib/api'
 
 interface User {
   _id: string
@@ -45,7 +46,7 @@ export default function LoginPage() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('https://emaur-api-40d46b1fc5a5.herokuapp.com/api/auth/users')
+      const response = await fetch(`${API_BASE_URL}/auth/users`)
       const data = await response.json()
       console.log(data)
       if (data.success) {
@@ -82,7 +83,7 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const response = await fetch('https://emaur-api-40d46b1fc5a5.herokuapp.com/api/auth/login', {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

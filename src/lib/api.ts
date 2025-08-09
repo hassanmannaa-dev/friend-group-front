@@ -1,4 +1,7 @@
 const API_BASE_URL = 'https://emaur-api-40d46b1fc5a5.herokuapp.com/api';
+// const API_BASE_URL = 'http://localhost:5000/api';
+
+export { API_BASE_URL };
 
 export interface Post {
   _id: string;
@@ -28,6 +31,16 @@ export interface Comment {
     avatarUrl: string;
   };
   createdAt: string;
+}
+
+export interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  avatarUrl: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface PaginationInfo {
@@ -155,6 +168,26 @@ class ApiService {
       return await response.json();
     } catch (error) {
       console.error('Error adding comment:', error);
+      throw error;
+    }
+  }
+
+  async getUsers(): Promise<ApiResponse<User>> {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/users`,
+        {
+          headers: this.getAuthHeaders(),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching users:', error);
       throw error;
     }
   }
