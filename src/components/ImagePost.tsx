@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Heart, MessageCircle } from 'lucide-react';
@@ -47,12 +48,16 @@ export function ImagePost({ post, onLike }: ImagePostProps) {
       className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
       onClick={handlePostClick}
     >
-      <div className="aspect-square overflow-hidden">
-        <img 
-          src={post.mediaUrl} 
-          alt={post.caption}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-        />
+      <div className="aspect-square overflow-hidden relative">
+        {post.mediaUrl && (
+          <Image 
+            src={post.mediaUrl}
+            alt={post.caption}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover hover:scale-105 transition-transform duration-300"
+          />
+        )}
       </div>
       
       <CardHeader className="p-4">
