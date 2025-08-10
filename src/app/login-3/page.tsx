@@ -13,6 +13,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { API_BASE_URL } from '@/lib/api'
+import Image from 'next/image'
 
 interface User {
   _id: string
@@ -298,13 +299,17 @@ export default function AnimeCharacterSelectPage() {
                       className="relative w-64 h-64 overflow-hidden"
                     >
                       {/* Character image */}
-                      <img
+                      <Image
                         src={user.avatarUrl}
                         alt={user.fullName}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
+                        fill
+                        sizes="256px"
+                        className="object-cover"
+                        onErrorCapture={(e) => {
+                          const target = e.target as HTMLElement;
+                          if (target && target instanceof HTMLImageElement) {
+                            (target as HTMLImageElement).style.display = 'none';
+                          }
                         }}
                       />
                       

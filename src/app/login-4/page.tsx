@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { animate } from "animejs"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import Image from "next/image"
 import { API_BASE_URL } from "@/lib/api"
 
 // ---------------------------------------------
@@ -241,8 +242,8 @@ function SelectedPane({ character, outgoingCharacter, onOutgoingDone, flashRef }
             className="absolute inset-0"
             style={{ zIndex: idx, transform: "translateY(0%)" }}
           >
-            <img src={src} alt="manga layer" className="absolute w-full h-full object-cover" style={{ top: 0 }} />
-            <img src={src} alt="manga layer clone" className="absolute w-full h-full object-cover" style={{ top: "100%" }} />
+            <Image src={src} alt="manga layer" fill sizes="100vw" className="object-cover" style={{ top: 0 }} />
+            <Image src={src} alt="manga layer clone" fill sizes="100vw" className="object-cover" style={{ top: "100%" }} />
           </div>
         ))}
       </div>
@@ -256,7 +257,7 @@ function SelectedPane({ character, outgoingCharacter, onOutgoingDone, flashRef }
             className="relative w-[70%] max-w-[520px] aspect-[4/5] border-[6px] border-black bg-white shadow-[10px_10px_0_0_#000]"
             aria-hidden
           >
-            <img src={outgoingCharacter.portraitSrc} alt={outgoingCharacter.name} className="w-full h-full object-cover" />
+            <Image src={outgoingCharacter.portraitSrc} alt={outgoingCharacter.name} fill sizes="(max-width: 520px) 70vw, 520px" className="object-cover" />
             <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white px-4 py-1 text-xl font-extrabold tracking-widest shadow-[6px_6px_0_0_#000] border-4 border-white">
               {outgoingCharacter.name}
             </div>
@@ -269,7 +270,7 @@ function SelectedPane({ character, outgoingCharacter, onOutgoingDone, flashRef }
           ref={incomingRef}
           className="relative w-[70%] max-w-[520px] aspect-[4/5] border-[6px] border-black bg-white shadow-[10px_10px_0_0_#000]"
         >
-          <img src={character.portraitSrc} alt={character.name} className="w-full h-full object-cover" />
+          <Image src={character.portraitSrc} alt={character.name} fill sizes="(max-width: 520px) 70vw, 520px" className="object-cover" />
           <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-yellow-400 text-black px-4 py-1 text-xl font-extrabold tracking-widest shadow-[6px_6px_0_0_#000] border-4 border-black">
             {character.name}
           </div>
@@ -365,7 +366,7 @@ function RosterGrid({ characters, selectedId, onSelect }: RosterGridProps) {
               className="relative aspect-[3/4] border-[6px] border-black bg-white shadow-[8px_8px_0_0_#000] focus:outline-none focus:ring-4 focus:ring-black"
               style={{ boxShadow: isSelected ? "12px 12px 0 0 #000" : undefined }}
             >
-              <img src={c.tileSrc} alt={c.name} className="absolute inset-0 w-full h-full object-cover" />
+              <Image src={c.tileSrc} alt={c.name} fill sizes="33vw" className="absolute inset-0 object-cover" />
               <div
                 className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 text-sm font-extrabold border-[4px] border-black shadow-[6px_6px_0_0_#000]"
                 style={{ backgroundColor: c.accent || "#FFD400" }}

@@ -1,6 +1,7 @@
 "use client"
 
 import React from 'react';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -172,12 +173,16 @@ export default function PostPage() {
           <CardContent>
             {/* Media Content */}
             {post.type === 'image' && post.mediaUrl && (
-              <div className="mb-4">
-                <img 
-                  src={post.mediaUrl} 
-                  alt={post.caption}
-                  className="w-full max-h-96 object-cover rounded-lg"
-                />
+              <div className="mb-4 relative w-full" style={{ maxHeight: '24rem' }}>
+                <div className="relative w-full h-0" style={{ paddingBottom: '56.25%' }}>
+                  <Image 
+                    src={post.mediaUrl}
+                    alt={post.caption}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    className="object-cover rounded-lg"
+                  />
+                </div>
               </div>
             )}
             
